@@ -13,7 +13,7 @@ class UsersApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
     behavior of "UsersApi"
     val applicationId = "b6951bf387b84f63b38911ae35d65e28"
     val userId = "04ddbd35d57d4d7b8f07f219c44457b2"
-    val userToken = "76a15b2f29e741eeb407d3891a7aa222"
+    val userToken = "fad4f2e4c7ed48548692e8799f1d7acd"
 
     val api = new UsersApi
     api.apiInvoker.defaultHeaders += "Authorization" -> s"Bearer $userToken"
