@@ -1,6 +1,8 @@
 ARTIK Cloud Scala SDK
 ==========================
 
+[![Build Status](https://travis-ci.org/artikcloud/artikcloud-scala.svg?branch=master)](https://travis-ci.org/artikcloud/artikcloud-scala)
+
 This SDK helps you connect your Scala applications to ARTIK Cloud. It exposes a number of methods to easily execute REST API calls to ARTIK Cloud.
 
 Prerequisites
