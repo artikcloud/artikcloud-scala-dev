@@ -15,6 +15,7 @@ class TokensApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
     val userToken = "76a15b2f29e741eeb407d3891a7aa222"
     val refreshToken = "bb90333aee114b3e97284814d978080d"
 
+
     val api = new TokensApi("https://accounts.artik.cloud")
     api.apiInvoker.defaultHeaders += "Authorization" -> s"Bearer $userToken"
 
