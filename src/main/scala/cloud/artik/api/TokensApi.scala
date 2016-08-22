@@ -55,7 +55,7 @@ class TokensApi(val defBasePath: String = "https://api.artik.cloud/v1.1",
    */
   def checkToken (tokenInfo: TokenRequest) : Option[CheckTokenResponse] = {
     // create path and map variables
-    val path = "/checkToken".replaceAll("\\{format\\}","json")
+    val path = "/accounts/checkToken".replaceAll("\\{format\\}","json")
     val contentTypes = List("application/json")
     val contentType = contentTypes(0)
 
@@ -99,7 +99,7 @@ class TokensApi(val defBasePath: String = "https://api.artik.cloud/v1.1",
    */
   def refreshToken (grantType: String, refreshToken: String) : Option[RefreshTokenResponse] = {
     // create path and map variables
-    val path = "/token".replaceAll("\\{format\\}","json")
+    val path = "/accounts/token".replaceAll("\\{format\\}","json")
     val contentTypes = List("application/x-www-form-urlencoded", "application/json")
     val contentType = contentTypes(0)
 

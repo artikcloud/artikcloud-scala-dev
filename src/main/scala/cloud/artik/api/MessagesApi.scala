@@ -28,7 +28,7 @@ import cloud.artik.model.AggregatesHistogramResponse
 import cloud.artik.model.FieldPresenceEnvelope
 import cloud.artik.model.NormalizedMessagesEnvelope
 import cloud.artik.model.AggregatesResponse
-import cloud.artik.model.SnapshotsResponseEnvelope
+import cloud.artik.model.SnapshotResponses
 import cloud.artik.model.MessageAction
 import cloud.artik.model.MessageIDEnvelope
 import io.swagger.client.ApiInvoker
@@ -250,9 +250,9 @@ if(String.valueOf(endDate) != "null") queryParams += "endDate" -> endDate.toStri
    * Get message snapshots.
    * @param sdids Device IDs for which the snapshots are requested. Max 100 device ids per call. 
    * @param includeTimestamp Indicates whether to return timestamps of the last update for each field. (optional)
-   * @return SnapshotsResponseEnvelope
+   * @return SnapshotResponses
    */
-  def getMessageSnapshots (sdids: String, includeTimestamp: Boolean) : Option[SnapshotsResponseEnvelope] = {
+  def getMessageSnapshots (sdids: String, includeTimestamp: Boolean) : Option[SnapshotResponses] = {
     // create path and map variables
     val path = "/messages/snapshots".replaceAll("\\{format\\}","json")
     val contentTypes = List("application/json")
@@ -280,7 +280,7 @@ if(String.valueOf(includeTimestamp) != "null") queryParams += "includeTimestamp"
     try {
       apiInvoker.invokeApi(basePath, path, "GET", queryParams.toMap, formParams.toMap, postBody, headerParams.toMap, contentType) match {
         case s: String =>
-           Some(ApiInvoker.deserialize(s, "", classOf[SnapshotsResponseEnvelope]).asInstanceOf[SnapshotsResponseEnvelope])
+           Some(ApiInvoker.deserialize(s, "", classOf[SnapshotResponses]).asInstanceOf[SnapshotResponses])
         case _ => None
       }
     } catch {

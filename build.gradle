@@ -1,7 +1,7 @@
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-group = 'cloud.gradle'
+group = 'cloud.artik'
 version = '2.0.5'
 
 buildscript {
