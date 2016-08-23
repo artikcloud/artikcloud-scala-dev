@@ -49,7 +49,7 @@ class TokensApi(val defBasePath: String = "https://api.artik.cloud/v1.1",
 
   /**
    * Check Token
-   * Check Token
+   * (Deprecated) Check Token. See tokenInfo
    * @param tokenInfo Token object to be checked 
    * @return CheckTokenResponse
    */
