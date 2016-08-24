@@ -1,19 +1,18 @@
 package cloud.artik.api
 
-import io.swagger.client._
-import cloud.artik.api._
 import cloud.artik.model._
+import com.typesafe.config.ConfigFactory
 import org.junit.runner.RunWith
 import org.scalatest._
-import scala.collection.JavaConverters._
 import org.scalatest.junit.JUnitRunner
-import java.util.HashMap
 
 @RunWith(classOf[JUnitRunner])
 class MessagesApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
     behavior of "MessagesApi"
-    val deviceToken = "dc43d12e2b59495daf94631e6ddfe3e8"
-    val sourceDeviceId = "19da42ee01414722a6ad1224097c38d4"
+
+    val conf = ConfigFactory.load("artik.properties")
+    val sourceDeviceId = conf.getString("device1.id")
+    val deviceToken = conf.getString("device1.token")
 
     val api = new MessagesApi
     api.apiInvoker.defaultHeaders += "Authorization" -> s"Bearer $deviceToken"
@@ -30,9 +29,9 @@ class MessagesApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
     it should "send a message to ArtikCloud and retrieve the normalized message" in {
         val data = Map("steps" -> 500)
 
-        val message = new MessageAction(data, null, sourceDeviceId, System.currentTimeMillis, "message")
+        val message = new Message(data, sourceDeviceId, System.currentTimeMillis, "message")
 
-        api.sendMessageAction(message) match {
+        api.sendMessage(message) match {
             case Some(messageIdEnvelope) =>
                 val messageId = messageIdEnvelope.data.mid
                 messageId should not be ("")

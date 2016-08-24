@@ -29,8 +29,10 @@ import cloud.artik.model.FieldPresenceEnvelope
 import cloud.artik.model.NormalizedMessagesEnvelope
 import cloud.artik.model.AggregatesResponse
 import cloud.artik.model.SnapshotResponses
-import cloud.artik.model.MessageAction
+import cloud.artik.model.NormalizedActionsEnvelope
+import cloud.artik.model.Actions
 import cloud.artik.model.MessageIDEnvelope
+import cloud.artik.model.Message
 import io.swagger.client.ApiInvoker
 import io.swagger.client.ApiException
 
@@ -290,11 +292,67 @@ if(String.valueOf(includeTimestamp) != "null") queryParams += "includeTimestamp"
   }
 
   /**
+   * Get Normalized Actions
+   * Get the actions normalized
+   * @param uid User ID. If not specified, assume that of the current authenticated user. If specified, it must be that of a user for which the current authenticated user has read access to. (optional)
+   * @param ddid Destination device ID of the actions being searched. (optional)
+   * @param mid The message ID being searched. (optional)
+   * @param offset A string that represents the starting item, should be the value of &#39;next&#39; field received in the last response. (required for pagination) (optional)
+   * @param count count (optional)
+   * @param startDate startDate (optional)
+   * @param endDate endDate (optional)
+   * @param order Desired sort order: &#39;asc&#39; or &#39;desc&#39; (optional)
+   * @return NormalizedActionsEnvelope
+   */
+  def getNormalizedActions (uid: String, ddid: String, mid: String, offset: String, count: Integer, startDate: Long, endDate: Long, order: String) : Option[NormalizedActionsEnvelope] = {
+    // create path and map variables
+    val path = "/actions".replaceAll("\\{format\\}","json")
+    val contentTypes = List("application/json")
+    val contentType = contentTypes(0)
+
+    // query params
+    val queryParams = new HashMap[String, String]
+    val headerParams = new HashMap[String, String]
+    val formParams = new HashMap[String, String]
+
+    if(String.valueOf(uid) != "null") queryParams += "uid" -> uid.toString
+if(String.valueOf(ddid) != "null") queryParams += "ddid" -> ddid.toString
+if(String.valueOf(mid) != "null") queryParams += "mid" -> mid.toString
+if(String.valueOf(offset) != "null") queryParams += "offset" -> offset.toString
+if(String.valueOf(count) != "null") queryParams += "count" -> count.toString
+if(String.valueOf(startDate) != "null") queryParams += "startDate" -> startDate.toString
+if(String.valueOf(endDate) != "null") queryParams += "endDate" -> endDate.toString
+if(String.valueOf(order) != "null") queryParams += "order" -> order.toString
+    
+    
+    var postBody: AnyRef = null
+
+    if(contentType.startsWith("multipart/form-data")) {
+      val mp = new FormDataMultiPart()
+      
+      postBody = mp
+    }
+    else {
+    }
+
+    try {
+      apiInvoker.invokeApi(basePath, path, "GET", queryParams.toMap, formParams.toMap, postBody, headerParams.toMap, contentType) match {
+        case s: String =>
+           Some(ApiInvoker.deserialize(s, "", classOf[NormalizedActionsEnvelope]).asInstanceOf[NormalizedActionsEnvelope])
+        case _ => None
+      }
+    } catch {
+      case ex: ApiException if ex.code == 404 => None
+      case ex: ApiException => throw ex
+    }
+  }
+
+  /**
    * Get Normalized Messages
    * Get the messages normalized
    * @param uid User ID. If not specified, assume that of the current authenticated user. If specified, it must be that of a user for which the current authenticated user has read access to. (optional)
    * @param sdid Source device ID of the messages being searched. (optional)
-   * @param mid The SAMI message ID being searched. (optional)
+   * @param mid The message ID being searched. (optional)
    * @param fieldPresence String representing a field from the specified device ID. (optional)
    * @param filter Filter. (optional)
    * @param offset A string that represents the starting item, should be the value of &#39;next&#39; field received in the last response. (required for pagination) (optional)
@@ -350,12 +408,55 @@ if(String.valueOf(order) != "null") queryParams += "order" -> order.toString
   }
 
   /**
-   * Send Message Action
-   * (Deprecated) Send a message or an Action:&lt;br/&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;Combination&lt;/th&gt;&lt;th&gt;Parameters&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Send Message&lt;/td&gt;&lt;td&gt;sdid, type&#x3D;message&lt;/td&gt;&lt;td&gt;Send a message from a Source Device&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Send Action&lt;/td&gt;&lt;td&gt;ddid, type&#x3D;action&lt;/td&gt;&lt;td&gt;Send an action to a Destination Device&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Common&lt;/td&gt;&lt;td&gt;data, ts, token&lt;/td&gt;&lt;td&gt;Parameters that can be used with the above combinations.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-   * @param data Message or Action object that is passed in the body 
+   * Send Actions
+   * Send Actions
+   * @param data Actions that are passed in the body 
    * @return MessageIDEnvelope
    */
-  def sendMessageAction (data: MessageAction) : Option[MessageIDEnvelope] = {
+  def sendActions (data: Actions) : Option[MessageIDEnvelope] = {
+    // create path and map variables
+    val path = "/actions".replaceAll("\\{format\\}","json")
+    val contentTypes = List("application/json")
+    val contentType = contentTypes(0)
+
+    // query params
+    val queryParams = new HashMap[String, String]
+    val headerParams = new HashMap[String, String]
+    val formParams = new HashMap[String, String]
+
+    if (data == null) throw new Exception("Missing required parameter 'data' when calling MessagesApi->sendActions")
+
+        
+    
+    var postBody: AnyRef = data
+
+    if(contentType.startsWith("multipart/form-data")) {
+      val mp = new FormDataMultiPart()
+      
+      postBody = mp
+    }
+    else {
+    }
+
+    try {
+      apiInvoker.invokeApi(basePath, path, "POST", queryParams.toMap, formParams.toMap, postBody, headerParams.toMap, contentType) match {
+        case s: String =>
+           Some(ApiInvoker.deserialize(s, "", classOf[MessageIDEnvelope]).asInstanceOf[MessageIDEnvelope])
+        case _ => None
+      }
+    } catch {
+      case ex: ApiException if ex.code == 404 => None
+      case ex: ApiException => throw ex
+    }
+  }
+
+  /**
+   * Send Message
+   * Send a message
+   * @param data Message object that is passed in the body 
+   * @return MessageIDEnvelope
+   */
+  def sendMessage (data: Message) : Option[MessageIDEnvelope] = {
     // create path and map variables
     val path = "/messages".replaceAll("\\{format\\}","json")
     val contentTypes = List("application/json")
@@ -366,7 +467,7 @@ if(String.valueOf(order) != "null") queryParams += "order" -> order.toString
     val headerParams = new HashMap[String, String]
     val formParams = new HashMap[String, String]
 
-    if (data == null) throw new Exception("Missing required parameter 'data' when calling MessagesApi->sendMessageAction")
+    if (data == null) throw new Exception("Missing required parameter 'data' when calling MessagesApi->sendMessage")
 
         
     

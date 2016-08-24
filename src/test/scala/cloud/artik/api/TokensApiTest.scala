@@ -1,22 +1,18 @@
 package cloud.artik.api
 
-import io.swagger.client._
-import cloud.artik.api._
-import cloud.artik.model._
+import com.typesafe.config.ConfigFactory
 import org.junit.runner.RunWith
 import org.scalatest._
-import scala.collection.JavaConverters._
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class TokensApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
     behavior of "TokensApi"
 
-    val userToken = "76a15b2f29e741eeb407d3891a7aa222"
-    val refreshToken = "bb90333aee114b3e97284814d978080d"
+    val conf = ConfigFactory.load("artik.properties")
+    val userToken = conf.getString("user1.token")
 
-
-    val api = new TokensApi("https://accounts.artik.cloud")
+    val api = new TokensApi
     api.apiInvoker.defaultHeaders += "Authorization" -> s"Bearer $userToken"
 
     // preparation before running a test
@@ -28,16 +24,16 @@ class TokensApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
     override def afterAll() {
     }
 
-    it should "check a user's token for validity" in {
-        val request = new TokenRequest(userToken)
-        api.checkToken(request) match {
+    it should "get the token info for a user access token" in {
+        api.tokenInfo() match {
             case Some(response) =>
-                response.data.message should be("Valid token")
+                response.data should not be(null)
             case None =>
-                fail("Couldnt check token")
+                fail("Couldnt get token info")
         }
     }
 
+    /*
     it should "refresh a user's token" in {
         api.refreshToken("refresh_token", refreshToken) match {
             case Some(response) =>
@@ -45,6 +41,6 @@ class TokensApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
             case None =>
                 fail("Couldnt refresh token")
         }
-    }
+    }*/
 
 }

@@ -15,7 +15,9 @@ lazy val root = (project in file(".")).
             "joda-time" % "joda-time" % "2.2",
             "org.joda" % "joda-convert" % "1.2",
             "org.scalatest" %% "scalatest" % "2.2.4" % "test",
-            "junit" % "junit" % "4.8.1" % "test"
+            "junit" % "junit" % "4.8.1" % "test",
+            "com.typesafe" % "config" % "1.3.0" % "test"
+
         ),
 
         resolvers ++= Seq(

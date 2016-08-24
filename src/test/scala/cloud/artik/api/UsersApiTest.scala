@@ -1,19 +1,19 @@
 package cloud.artik.api
 
-import io.swagger.client._
-import cloud.artik.api._
 import cloud.artik.model._
+import com.typesafe.config.ConfigFactory
 import org.junit.runner.RunWith
 import org.scalatest._
-import scala.collection.JavaConverters._
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class UsersApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
     behavior of "UsersApi"
-    val applicationId = "b6951bf387b84f63b38911ae35d65e28"
-    val userId = "04ddbd35d57d4d7b8f07f219c44457b2"
-    val userToken = "fad4f2e4c7ed48548692e8799f1d7acd"
+
+    val conf = ConfigFactory.load("artik.properties")
+    val userId = conf.getString("user1.id")
+    val userToken = conf.getString("user1.token")
+    val applicationId = conf.getString("user1.aid")
 
     val api = new UsersApi
     api.apiInvoker.defaultHeaders += "Authorization" -> s"Bearer $userToken"
@@ -33,8 +33,8 @@ class UsersApiTest extends FlatSpec with Matchers with BeforeAndAfterAll {
                 val user = userEnvelope.data
 
                 user.id should be(userId)
-                user.name should be("maneesh")
-                user.fullName should be("Maneesh Sahu")
+                user.name should be(conf.getString("user1.name"))
+                user.fullName should be(conf.getString("user1.fullname"))
             }
             case None =>
                 fail("Couldnt get User Profile")

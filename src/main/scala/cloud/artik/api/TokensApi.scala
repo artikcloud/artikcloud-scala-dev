@@ -27,6 +27,7 @@ package cloud.artik.api
 import cloud.artik.model.TokenRequest
 import cloud.artik.model.CheckTokenResponse
 import cloud.artik.model.RefreshTokenResponse
+import cloud.artik.model.TokenInfoSuccessResponse
 import io.swagger.client.ApiInvoker
 import io.swagger.client.ApiException
 
@@ -130,6 +131,46 @@ class TokensApi(val defBasePath: String = "https://api.artik.cloud/v1.1",
       apiInvoker.invokeApi(basePath, path, "POST", queryParams.toMap, formParams.toMap, postBody, headerParams.toMap, contentType) match {
         case s: String =>
            Some(ApiInvoker.deserialize(s, "", classOf[RefreshTokenResponse]).asInstanceOf[RefreshTokenResponse])
+        case _ => None
+      }
+    } catch {
+      case ex: ApiException if ex.code == 404 => None
+      case ex: ApiException => throw ex
+    }
+  }
+
+  /**
+   * Token Info
+   * Returns the Token Information
+   * @return TokenInfoSuccessResponse
+   */
+  def tokenInfo () : Option[TokenInfoSuccessResponse] = {
+    // create path and map variables
+    val path = "/accounts/tokenInfo".replaceAll("\\{format\\}","json")
+    val contentTypes = List("application/json")
+    val contentType = contentTypes(0)
+
+    // query params
+    val queryParams = new HashMap[String, String]
+    val headerParams = new HashMap[String, String]
+    val formParams = new HashMap[String, String]
+
+        
+    
+    var postBody: AnyRef = null
+
+    if(contentType.startsWith("multipart/form-data")) {
+      val mp = new FormDataMultiPart()
+      
+      postBody = mp
+    }
+    else {
+    }
+
+    try {
+      apiInvoker.invokeApi(basePath, path, "GET", queryParams.toMap, formParams.toMap, postBody, headerParams.toMap, contentType) match {
+        case s: String =>
+           Some(ApiInvoker.deserialize(s, "", classOf[TokenInfoSuccessResponse]).asInstanceOf[TokenInfoSuccessResponse])
         case _ => None
       }
     } catch {
