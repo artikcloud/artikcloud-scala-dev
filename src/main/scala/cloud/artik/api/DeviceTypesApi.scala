@@ -183,6 +183,55 @@ if(String.valueOf(tags) != "null") queryParams += "tags" -> tags.toString
   }
 
   /**
+   * Get Device Types by Application
+   * Get Device Types by Application
+   * @param appId Application ID. 
+   * @param productInfo Flag to include the associated ProductInfo if present (optional)
+   * @param count Desired count of items in the result set. (optional)
+   * @param offset Offset for pagination. (optional)
+   * @return DeviceTypesEnvelope
+   */
+  def getDeviceTypesByApplication (appId: String, productInfo: Boolean, count: Integer, offset: Integer) : Option[DeviceTypesEnvelope] = {
+    // create path and map variables
+    val path = "/applications/{appId}/devicetypes".replaceAll("\\{format\\}","json").replaceAll("\\{" + "appId" + "\\}",apiInvoker.escape(appId))
+
+
+    val contentTypes = List("application/json")
+    val contentType = contentTypes(0)
+
+    // query params
+    val queryParams = new HashMap[String, String]
+    val headerParams = new HashMap[String, String]
+    val formParams = new HashMap[String, String]
+
+    if(String.valueOf(productInfo) != "null") queryParams += "productInfo" -> productInfo.toString
+if(String.valueOf(count) != "null") queryParams += "count" -> count.toString
+if(String.valueOf(offset) != "null") queryParams += "offset" -> offset.toString
+    
+    
+    var postBody: AnyRef = null
+
+    if(contentType.startsWith("multipart/form-data")) {
+      val mp = new FormDataMultiPart()
+      
+      postBody = mp
+    }
+    else {
+    }
+
+    try {
+      apiInvoker.invokeApi(basePath, path, "GET", queryParams.toMap, formParams.toMap, postBody, headerParams.toMap, contentType) match {
+        case s: String =>
+           Some(ApiInvoker.deserialize(s, "", classOf[DeviceTypesEnvelope]).asInstanceOf[DeviceTypesEnvelope])
+        case _ => None
+      }
+    } catch {
+      case ex: ApiException if ex.code == 404 => None
+      case ex: ApiException => throw ex
+    }
+  }
+
+  /**
    * Get Latest Manifest Properties
    * Get a Device Type&#39;s manifest properties for the latest version.
    * @param deviceTypeId Device Type ID. 

@@ -1,8 +1,8 @@
 lazy val root = (project in file(".")).
     settings(
-        version       := "2.0.5",
-        name          := "artikcloud-scala",
-        organization  := "cloud.artik",
+        version       := "1.0.0",
+        name          := "swagger-scala-client",
+        organization  := "io.swagger",
         scalaVersion  := "2.11.8",
 
         libraryDependencies ++= Seq(
@@ -15,9 +15,7 @@ lazy val root = (project in file(".")).
             "joda-time" % "joda-time" % "2.2",
             "org.joda" % "joda-convert" % "1.2",
             "org.scalatest" %% "scalatest" % "2.2.4" % "test",
-            "junit" % "junit" % "4.8.1" % "test",
-            "com.typesafe" % "config" % "1.3.0" % "test"
-
+            "junit" % "junit" % "4.8.1" % "test"
         ),
 
         resolvers ++= Seq(
