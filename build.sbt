@@ -1,8 +1,8 @@
 lazy val root = (project in file(".")).
     settings(
-        version       := "1.0.0",
-        name          := "swagger-scala-client",
-        organization  := "io.swagger",
+        version       := "2.0.6-SNAPSHOT",
+        name          := "artikcloud-scala",
+        organization  := "cloud.artik",
         scalaVersion  := "2.11.8",
 
         libraryDependencies ++= Seq(
